@@ -1,5 +1,8 @@
+import os
 import cv2
 import numpy as np
+
+from termcolor import cprint
 
 def getAnswersFromProcessedImage(img, threshold):
     imgColumns = np.array_split(img, 2, axis=1) # split das colunas
@@ -34,27 +37,27 @@ def getAnswersFromTest(img):
     cv2.imshow('img com thresh', imgThreshold)
     return getAnswersFromProcessedImage(imgThreshold, 0.5)
 
-def compareAnswersAndGetScore(gabarito, prova):
-    score = 0
-    for i in range(0, 50):
-        g = gabarito[i]
-        p = prova[i]
-        if g == None:
-            continue
-        if g == p:
-            score += 1
-    return score
-
 def displayAnswers(listaProva, listaGabarito):
+    right_ans = 0
     print('Respostas:     Prova       Gabarito')
     for i in range(len(listaProva)):
-
-        print("Questao " + str(i + 1) + ":      " + str(listaProva[i])+ '       ' + str(listaGabarito[i]))
+        if(listaProva[i] != None and listaProva[i] == listaGabarito[i]):
+            cprint("Questao " + str(i + 1) + ":      " + str(listaProva[i])+ '       ' + str(listaGabarito[i]), 'green')
+            right_ans += 1
+        else:
+            cprint("Questao " + str(i + 1) + ":      " + str(listaProva[i])+ '       ' + str(listaGabarito[i]), 'red')
     print('')
+    print('Respostas certas: ', right_ans)
 
-# prova = getAnswersFromTest("imagens/prova_1.jpeg")
-# gabarito = getAnswersFromTest("imagens/gabarito_1.jpeg")
-# print('gabarito ',gabarito)
-# score = compareAnswersAndGetScore(gabarito, prova)
-
-# print("Nota: " + str(score))
+# parametro da função é o path do diretório com as imagens do gabaritos
+def organizarPastaGabaritos(imagesPaths):
+    lista_files = os.listdir(imagesPaths)
+    tiposGabaritos = {}
+    for gabaritoPath in lista_files:
+        tipo = gabaritoPath.split('.')[0].split('_')[-1] # pega o numero que serve idenetificador do tipo
+        if(imagesPaths[-1] == '/'):
+            pathCompletoGabarito = imagesPaths + gabaritoPath
+        else:
+            pathCompletoGabarito = imagesPaths + '/' + gabaritoPath
+        tiposGabaritos[tipo] = pathCompletoGabarito
+    return tiposGabaritos

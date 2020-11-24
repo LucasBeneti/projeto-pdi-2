@@ -61,7 +61,6 @@ def displayAnswers(listaProva, listaGabarito):
     print('')
     print('Respostas certas: ', right_ans)
 
-
 if __name__ == '__main__':
     pathToProva, pathToGabarito = getFilePaths()
     if pathToProva == None or pathToGabarito == None:

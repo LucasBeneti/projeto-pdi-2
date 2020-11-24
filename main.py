@@ -1,5 +1,7 @@
 import os
 import cv2
+
+# file utils com as funcoes utilizadas no processamento
 import utils
 
 def getRightAnswers(gabarito, prova):
